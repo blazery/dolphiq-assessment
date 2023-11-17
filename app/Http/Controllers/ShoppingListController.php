@@ -33,7 +33,7 @@ class ShoppingListController extends Controller
      */
     public function show(string $id)
     {
-        return ShoppingList::fimd($id);
+        return ShoppingList::find($id);
     }
 
     /**

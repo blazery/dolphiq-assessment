@@ -139,4 +139,14 @@ class ShoppingListItemTest extends TestCase
         $s = ShoppingListItem::find($fakeItem->id);
         $this->assertEmpty($s);
     }
+
+    public function test_get_all_items(): void
+    {
+        // TODO implement
+    }
+
+    public function test_get_item(): void
+    {
+        // TODO implement
+    }
 }

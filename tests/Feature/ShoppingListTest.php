@@ -50,4 +50,14 @@ class ShoppingListTest extends TestCase
                 'name' => $fakeList->name
             ]);
     }
+
+    public function test_update_list(): void
+    {
+        // TODO implement
+    }
+
+    public function test_remove_list(): void
+    {
+        // TODO implement
+    }
 }
