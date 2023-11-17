@@ -15,13 +15,6 @@ class ShoppingListController extends Controller
         return ShoppingList::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -60,6 +53,7 @@ class ShoppingListController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        ShoppingList::destroy($id);
+        return response()->json(["status" => 200, "msg" => "resource removed"]);
     }
 }

@@ -11,8 +11,8 @@ class ShoppingListItem extends Model
 {
     use HasFactory;
 
-    public function items(): BelongsTo
+    public function list(): BelongsTo
     {
-        return $this->belongsTo(ShoppingList::class);
+        return $this->belongsTo(ShoppingList::class, 'id');
     }
 }

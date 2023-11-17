@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shopping_list', function (Blueprint $table) {
+        Schema::create('shopping_lists', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
 
         // add foreign key constraint for data integrity.
-        Schema::create('shopping_list_item', function (Blueprint $table) {
+        Schema::create('shopping_list_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('shopping_list_id')->constrained();
             $table->string('product_name');
@@ -33,7 +33,7 @@ return new class extends Migration
     public function down(): void
     {
         // Down in reverse order to prevent possible key constrains issues.
-        Schema::dropIfExists('shopping_list_item');
-        Schema::dropIfExists('shopping_list');
+        Schema::dropIfExists('shopping_list_items');
+        Schema::dropIfExists('shopping_lists');
     }
 };

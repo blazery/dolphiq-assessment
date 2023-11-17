@@ -19,12 +19,17 @@ class ShoppingListItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): ShoppingListItem
+    public function store(Request $request)
     {
+
+        if (!$request->shopping_list_id || !$request->product_name) {
+            return response('', 400);
+        }
+
         $shoppingListitem = new ShoppingListItem();
-        $shoppingListitem->shopping_list_id = 0;
-        $shoppingListitem->product_name = '';
-        $shoppingListitem->product_quantity = 1;
+        $shoppingListitem->shopping_list_id = $request->shopping_list_id;
+        $shoppingListitem->product_name = $request->product_name;
+        $shoppingListitem->product_quantity = $request->product_quantity ?: 1;
         $shoppingListitem->save();
 
         return $shoppingListitem;
@@ -45,8 +50,8 @@ class ShoppingListItemController extends Controller
     {
         $shoppingListItem = ShoppingListItem::find($id);
 
-        $shoppingListItem->name = $request->product_name ?: $shoppingListItem->product_name;
-        $shoppingListItem->name = $request->product_quantity ?: $shoppingListItem->product_quantity;
+        $shoppingListItem->product_name = $request->product_name ?: $shoppingListItem->product_name;
+        $shoppingListItem->product_quantity = $request->product_quantity ?: $shoppingListItem->product_quantity;
 
         $shoppingListItem->save();
 

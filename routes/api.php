@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ShoppingListController;
+use App\Http\Controllers\ShoppingListItemController;
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use Illuminate\Http\Request;
@@ -23,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource(
     'shopping-list',
-    ShoppingList::class,
+    ShoppingListController::class,
     ['only' => [
         'index', 'store', 'show', 'update', 'destroy'
     ]]
@@ -31,7 +33,7 @@ Route::resource(
 
 Route::resource(
     'shopping-list-item',
-    ShoppingListItem::class,
+    ShoppingListItemController::class,
     ['only' => [
         'index', 'store', 'show', 'update', 'destroy'
     ]]
