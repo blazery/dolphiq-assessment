@@ -21,10 +21,11 @@ class ShoppingListItemController extends Controller
      */
     public function store(Request $request)
     {
-
-        if (!$request->shopping_list_id || !$request->product_name) {
-            return response('', 400);
-        }
+        $request->validate([
+            'shopping_list_id' => 'required|numeric|integer',
+            'product_name' => 'required|max:255',
+            'product_quantity' => 'numeric|integer',
+        ]);
 
         $shoppingListitem = new ShoppingListItem();
         $shoppingListitem->shopping_list_id = $request->shopping_list_id;
@@ -50,6 +51,11 @@ class ShoppingListItemController extends Controller
     {
         $shoppingListItem = ShoppingListItem::find($id);
 
+        $request->validate([
+            'product_name' => 'string|max:255',
+            'product_quantity' => 'numeric|integer',
+        ]);
+
         $shoppingListItem->product_name = $request->product_name ?: $shoppingListItem->product_name;
         $shoppingListItem->product_quantity = $request->product_quantity ?: $shoppingListItem->product_quantity;
 
@@ -63,7 +69,10 @@ class ShoppingListItemController extends Controller
      */
     public function destroy(string $id)
     {
-        ShoppingListItem::destroy($id);
-        return response()->json(["status" => 200, "msg" => "resource removed"]);
+        $result = ShoppingListItem::destroy($id);
+        if ($result  > 0) {
+            return response()->json(["status" => 200, "msg" => "resource removed"]);
+        }
+        return response('', 404);
     }
 }

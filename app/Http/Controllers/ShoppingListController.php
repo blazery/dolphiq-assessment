@@ -21,6 +21,10 @@ class ShoppingListController extends Controller
      */
     public function store(Request $request): ShoppingList
     {
+
+        $request->validate([
+            'name' => 'required|max:255'
+        ]);
         $shoppinglist = new ShoppingList();
         $shoppinglist->name = $request->name;
         $shoppinglist->save();
@@ -33,6 +37,10 @@ class ShoppingListController extends Controller
      */
     public function show(string $id)
     {
+        $list = ShoppingList::find($id);
+        if (!$list) {
+            return response('', 404);
+        }
         return ShoppingList::find($id);
     }
 
@@ -41,7 +49,14 @@ class ShoppingListController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
         $shoppinglist = ShoppingList::find($id);
+        if (!$shoppinglist) {
+            return response('', 404);
+        }
+
         $shoppinglist->name = $request->name ?: $shoppinglist->name;
         $shoppinglist->save();
 
@@ -51,9 +66,12 @@ class ShoppingListController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        ShoppingList::destroy($id);
-        return response()->json(["status" => 200, "msg" => "resource removed"]);
+        $result = ShoppingList::destroy($id);
+        if ($result  > 0) {
+            return response()->json(["status" => 200, "msg" => "resource removed"]);
+        }
+        return response('', 404);
     }
 }

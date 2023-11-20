@@ -50,9 +50,9 @@ class ShoppingListItemTest extends TestCase
         $response = $this->post('/api/shopping-list-item', [
             'product_name' => $fakeItem->product_name,
             'product_quantity' => $fakeItem->product_quantity,
-        ]);
+        ], ['accept' => 'application/json']);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function test_add_shopping_item_no_name(): void
@@ -62,9 +62,9 @@ class ShoppingListItemTest extends TestCase
         $response = $this->post('/api/shopping-list-item', [
             'shopping_list_id' => $fakeList->id,
             'product_quantity' => $fakeItem->product_quantity,
-        ]);
+        ], ['accept' => 'application/json']);
 
-        $response->assertStatus(400);
+        $response->assertStatus(422);
     }
 
     public function test_add_shopping_item_no_quantity(): void
@@ -125,6 +125,22 @@ class ShoppingListItemTest extends TestCase
         $this->assertEquals($newName, $s->product_name);
     }
 
+    public function test_update_shopping_item_wrong_name(): void
+    {
+        // setup  list linked to item
+        [$fakeList, $fakeItem] = $this->setup_test_data();
+        $fakeItem->shopping_list_id = $fakeList->id;
+        $fakeItem->save();
+
+        $newName = $fakeItem->product_name . "_NEWNAME";
+
+        $response = $this->put("/api/shopping-list-item/$fakeItem->id", [
+            'product_name' => 123,
+        ], ['accept' => 'application/json']);
+
+        $response->assertStatus(422);
+    }
+
     public function test_remove_shopping_item(): void
     {
         // setup  list linked to item
@@ -139,6 +155,18 @@ class ShoppingListItemTest extends TestCase
 
         $s = ShoppingListItem::find($fakeItem->id);
         $this->assertEmpty($s);
+    }
+
+    public function test_remove_shopping_item_wrong_id(): void
+    {
+        // setup  list linked to item
+        [$fakeList, $fakeItem] = $this->setup_test_data();
+        $fakeItem->shopping_list_id = $fakeList->id;
+        $fakeItem->save();
+
+        $response = $this->delete("/api/shopping-list-item/random_id");
+
+        $response->assertStatus(404);
     }
 
     public function test_get_all_items(): void
