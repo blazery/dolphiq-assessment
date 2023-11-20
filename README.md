@@ -16,7 +16,7 @@ To start developing run `php artisan serve`, this should get you started without
 ## TODO's by priority
 
 * Extended testing [x]
-* Input validation
+* Input validation [x]
 * Resource models instead of models
 * Authorization
 * Authentication
