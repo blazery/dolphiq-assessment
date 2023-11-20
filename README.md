@@ -11,3 +11,14 @@ After this composer will be needed to install all dependancies the lastest versi
 Next up install the projects dependancies by running `composer install` in the projects directory.
 
 To start developing run `php artisan serve`, this should get you started without having to setup an Apache server, possibly nginx or php-fmp. 
+
+
+## TODO's by priority
+
+* Extended testing
+* Input validation
+* Resource models instead of models
+* Authorization
+* Authentication
+* WSL 2 install
+  * With docker

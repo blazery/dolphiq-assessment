@@ -2,8 +2,6 @@
 
 use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\ShoppingListItemController;
-use App\Models\ShoppingList;
-use App\Models\ShoppingListItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

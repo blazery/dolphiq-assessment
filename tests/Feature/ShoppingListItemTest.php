@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
+use Database\Factories\ShoppingListItemFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -142,11 +143,41 @@ class ShoppingListItemTest extends TestCase
 
     public function test_get_all_items(): void
     {
-        // TODO implement
+
+        //setup one list with one item
+        [$fakeList, $fakeItem] = $this->setup_test_data();
+        $fakeItem->shopping_list_id = $fakeList->id;
+        $fakeItem->save();
+
+        // setip list with 10 items;
+        $TESTCOUNT = 10;
+        [$fakeList] = $this->setup_test_data();
+        ShoppingListItem::factory()->count($TESTCOUNT)->create(['shopping_list_id' => $fakeList->id]);
+
+        $response = $this->get("/api/shopping-list-item/");
+        $response->assertStatus(200);
+        $json = $response->decodeResponseJson();
+
+        // Getting all items should return COUNT + 1;
+        $this->assertCount($TESTCOUNT + 1, $json);
+
+        // Finding the last list should include COUNT items;
+        $s = ShoppingList::find($fakeList->id);
+        $this->assertCount($TESTCOUNT, $s->items);
     }
 
     public function test_get_item(): void
     {
-        // TODO implement
+        //setup one list with one item
+        [$fakeList, $fakeItem] = $this->setup_test_data();
+        $fakeItem->shopping_list_id = $fakeList->id;
+        $fakeItem->save();
+
+        $response = $this->get("/api/shopping-list-item/$fakeItem->id");
+        $response->assertStatus(200)
+            ->assertJson([
+                'id' => $fakeItem->id,
+                'product_name' => $fakeItem->product_name
+            ]);
     }
 }

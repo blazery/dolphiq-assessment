@@ -53,11 +53,34 @@ class ShoppingListTest extends TestCase
 
     public function test_update_list(): void
     {
-        // TODO implement
+        $fakeList = ShoppingList::factory()->create();
+        $NEWNAME =  $fakeList->name . "_NEWNAME";
+        $response = $this->put("/api/shopping-list/$fakeList->id", [
+            'name' => $NEWNAME
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'id' => $fakeList->id,
+                'name' => $NEWNAME
+            ]);
+
+        $list = ShoppingList::find($fakeList->id);
+        $this->assertNotEmpty($list);
+        $this->assertEquals($NEWNAME, $list->name);
     }
 
     public function test_remove_list(): void
     {
-        // TODO implement
+        $fakeList = ShoppingList::factory()->create();
+        $response = $this->delete("/api/shopping-list/$fakeList->id");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 200
+            ]);
+
+        $list = ShoppingList::find($fakeList->id);
+        $this->assertEmpty($list);
     }
 }
